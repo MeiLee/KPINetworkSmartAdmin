@@ -1,0 +1,12 @@
+C:\Projects\ASP.NET_Core2\src\KPINetwork.Web\bin\Release\netcoreapp2.0\KPINetwork.Web.deps.json
+C:\Projects\ASP.NET_Core2\src\KPINetwork.Web\bin\Release\netcoreapp2.0\KPINetwork.Web.runtimeconfig.json
+C:\Projects\ASP.NET_Core2\src\KPINetwork.Web\bin\Release\netcoreapp2.0\KPINetwork.Web.runtimeconfig.dev.json
+C:\Projects\ASP.NET_Core2\src\KPINetwork.Web\bin\Release\netcoreapp2.0\KPINetwork.Web.dll
+C:\Projects\ASP.NET_Core2\src\KPINetwork.Web\bin\Release\netcoreapp2.0\KPINetwork.Web.pdb
+C:\Projects\ASP.NET_Core2\src\KPINetwork.Web\obj\Release\netcoreapp2.0\KPINetwork.Web.csprojResolveAssemblyReference.cache
+C:\Projects\ASP.NET_Core2\src\KPINetwork.Web\obj\Release\netcoreapp2.0\KPINetwork.Web.csproj.CoreCompileInputs.cache
+C:\Projects\ASP.NET_Core2\src\KPINetwork.Web\obj\Release\netcoreapp2.0\UserSecretsAssemblyInfo.cs
+C:\Projects\ASP.NET_Core2\src\KPINetwork.Web\obj\Release\netcoreapp2.0\KPINetwork.Web.AssemblyInfoInputs.cache
+C:\Projects\ASP.NET_Core2\src\KPINetwork.Web\obj\Release\netcoreapp2.0\KPINetwork.Web.AssemblyInfo.cs
+C:\Projects\ASP.NET_Core2\src\KPINetwork.Web\obj\Release\netcoreapp2.0\KPINetwork.Web.dll
+C:\Projects\ASP.NET_Core2\src\KPINetwork.Web\obj\Release\netcoreapp2.0\KPINetwork.Web.pdb
