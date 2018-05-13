@@ -28,6 +28,7 @@ bld/
 [Oo]bj/
 .dtbcache/
 sqlite3/
+netcoreapp2.0/
 
 # Visual Studo 2015 cache/options directory
 .vs/
@@ -201,3 +202,11 @@ FakesAssemblies/
 
 # Visual Studio 6 workspace options file
 *.opt
+
+#Only Include these specific directories and subdirectories:
+!Externals/
+/Tools/Mini Tracker
+/Web_Builds
+/Docs/Design Research/Current Version Phase 12/9!!_FA_Map_V5 joannelisa.pdf
+/Web/NemoWebService/Content/Combined.pem.txt
+/Web/NemoWebService/Content/ios_distribution.cer
