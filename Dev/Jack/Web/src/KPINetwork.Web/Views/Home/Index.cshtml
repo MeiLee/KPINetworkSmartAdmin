@@ -1,0 +1,229 @@
+@model SmartAdmin.Web.Models.Dashboards
+@{ 
+    var allDashboards = ViewData["Dashboards"] as Dashboards;
+}
+<!-- Bread crumb is created dynamically -->
+<!-- row -->
+<div class="row">
+
+    <!-- col -->
+    <div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
+        <h1 class="page-title txt-color-blueDark">
+
+            <!-- PAGE HEADER -->
+            <i class="fa-fw fa fa-table"></i>
+            Dashboard
+            <span>
+                >
+                Manage my KPI Dashboard
+            </span>
+        </h1>
+    </div>
+    <!-- end col -->
+
+</div>
+<!-- end row -->
+<!--
+The ID "widget-grid" will start to initialize all widgets below
+You do not need to use widgets if you dont want to. Simply remove
+the <section></section> and you can use wells or panels instead
+-->
+<!-- widget grid -->
+<section id="widget-grid" class="">
+
+            <!-- row -->
+    <div class="row">
+
+        @{
+            for (int i = 1; i <= ViewBag.KPICount; i++)
+            {
+
+                    <!-- NEW WIDGET START -->
+                    <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <table id="@("jqgrid" + i)"></table>
+                        <div id="@("pjqgrid" + i)"></div>
+                        <br />
+                    </article>
+                    <!-- WIDGET END -->
+            }
+        }
+        <!-- WIDGET END -->
+    </div>
+
+            <!-- end row -->
+
+</section>
+
+    <!-- end widget grid -->
+    @section Scripts {
+<script type="text/javascript">
+
+        /* DO NOT REMOVE : GLOBAL FUNCTIONS!
+	 *
+	 * pageSetUp(); WILL CALL THE FOLLOWING FUNCTIONS
+	 *
+	 * // activate tooltips
+	 * $("[rel=tooltip]").tooltip();
+	 *
+	 * // activate popovers
+	 * $("[rel=popover]").popover();
+	 *
+	 * // activate popovers with hover states
+	 * $("[rel=popover-hover]").popover({ trigger: "hover" });
+	 *
+	 * // activate inline charts
+	 * runAllCharts();
+	 *
+	 * // setup widgets
+	 * setup_widgets_desktop();
+	 *
+	 * // run form elements
+	 * runAllForms();
+	 *
+	 ********************************
+	 *
+	 * pageSetUp() is needed whenever you load a page.
+	 * It initializes and checks for all basic elements of the page
+	 * and makes rendering easier.
+	 *
+	 */
+
+        pageSetUp();
+
+        /*
+         * ALL PAGE RELATED SCRIPTS CAN GO BELOW HERE
+         * eg alert("my home function");
+         *
+         * var pagefunction = function() {
+         *   ...
+         * }
+         * loadScript("/js/plugin/_PLUGIN_NAME_.js", pagefunction);
+         *
+         */
+
+        var pagefunction = function() {
+            loadScript("/js/plugin/jqgrid/jquery.jqGrid.min.js", run_jqgrid_function);
+
+            function run_jqgrid_function() {
+                var dashboards = @Html.Raw(ViewBag.Dashboards);
+                for (dashIndex = 1; dashIndex <= @ViewBag.KPICount; dashIndex++) {
+                    var jqgrid_data = dashboards[dashIndex-1].List;
+                    jQuery("#jqgrid" + dashIndex).jqGrid({
+                        data: jqgrid_data,
+                        datatype: "local",
+                        height: 'auto',
+                        colNames: dashboards[dashIndex - 1].ColumnNames,
+                        colModel: dashboards[dashIndex - 1].ColumnModel,
+                        rowNum: 10,
+                        rowList: [10, 20, 30],
+                        pager: '#pjqgrid' + dashIndex,
+                        sortname: 'id',
+                        toolbarfilter: true,
+                        viewrecords: true,
+                        sortorder: "asc",
+                        gridComplete: function () {
+                            var ids = jQuery("#jqgrid" + dashIndex).jqGrid('getDataIDs');
+                            for (var i = 0; i < ids.length; i++) {
+                                var cl = ids[i];
+                                be =
+                                    "<button class='btn btn-xs btn-default' data-original-title='Edit Row' onclick=\"jQuery('#jqgrid" + dashIndex + "').editRow('" +
+                                    cl +
+                                    "');\"><i class='fa fa-pencil'></i></button>";
+                                se =
+                                    "<button class='btn btn-xs btn-default' data-original-title='Save Row' onclick=\"jQuery('#jqgrid" + dashIndex + "').saveRow('" +
+                                    cl +
+                                    "');\"><i class='fa fa-save'></i></button>";
+                                ca =
+                                    "<button class='btn btn-xs btn-default' data-original-title='Cancel' onclick=\"jQuery('#jqgrid" + dashIndex + "').restoreRow('" +
+                                    cl +
+                                    "');\"><i class='fa fa-times'></i></button>";
+                                //ce = "<button class='btn btn-xs btn-default' onclick=\"jQuery('#jqgrid1').restoreRow('"+cl+"');\"><i class='fa fa-times'></i></button>";
+                                //jQuery("#jqgrid" + dashIndex).jqGrid('setRowData',ids[i],{act:be+se+ce});
+                                jQuery("#jqgrid" + dashIndex).jqGrid('setRowData', ids[i], { act: be + se + ca });
+                            }
+                        },
+                        editurl: "dummy.html",
+                        caption: dashboards[dashIndex - 1].Name,
+                        multiselect: false,
+                        autowidth: true,
+
+                    });
+                    jQuery("#jqgrid" + dashIndex).jqGrid('navGrid',
+                        "#pjqgrid" + dashIndex,
+                        {
+                            edit: false,
+                            add: false,
+                            del: true
+                        });
+                    jQuery("#jqgrid" + dashIndex).jqGrid('inlineNav', "#pjqgrid" + dashIndex);
+                    /* Add tooltips */
+                    $('.navtable .ui-pg-button').tooltip({
+                        container: 'body'
+                    });
+
+                    jQuery("#m" + dashIndex).click(function () {
+                        var s;
+                        s = jQuery("#jqgrid" + dashIndex).jqGrid('getGridParam', 'selarrrow');
+                        alert(s);
+                    });
+                    jQuery("#m" + dashIndex + "s").click(function () {
+                        jQuery("#jqgrid" + dashIndex).jqGrid('setSelection', "13");
+                    });
+                }
+
+                // remove classes
+                $(".ui-jqgrid").removeClass("ui-widget ui-widget-content");
+                $(".ui-jqgrid-view").children().removeClass("ui-widget-header ui-state-default");
+                $(".ui-jqgrid-labels, .ui-search-toolbar").children()
+                    .removeClass("ui-state-default ui-th-column ui-th-ltr");
+                $(".ui-jqgrid-pager").removeClass("ui-state-default");
+                $(".ui-jqgrid").removeClass("ui-widget-content");
+
+                // add classes
+                $(".ui-jqgrid-htable").addClass("table table-bordered table-hover");
+                $(".ui-jqgrid-btable").addClass("table table-bordered table-striped");
+
+
+                $(".ui-pg-div").removeClass().addClass("btn btn-sm btn-primary");
+                $(".ui-icon.ui-icon-plus").removeClass().addClass("fa fa-plus");
+                $(".ui-icon.ui-icon-pencil").removeClass().addClass("fa fa-pencil");
+                $(".ui-icon.ui-icon-trash").removeClass().addClass("fa fa-trash-o");
+                $(".ui-icon.ui-icon-search").removeClass().addClass("fa fa-search");
+                $(".ui-icon.ui-icon-refresh").removeClass().addClass("fa fa-refresh");
+                $(".ui-icon.ui-icon-disk").removeClass().addClass("fa fa-save").parent(".btn-primary")
+                    .removeClass("btn-primary").addClass("btn-success");
+                $(".ui-icon.ui-icon-cancel").removeClass().addClass("fa fa-times").parent(".btn-primary")
+                    .removeClass("btn-primary").addClass("btn-danger");
+
+                $(".ui-icon.ui-icon-seek-prev").wrap("<div class='btn btn-sm btn-default'></div>");
+                $(".ui-icon.ui-icon-seek-prev").removeClass().addClass("fa fa-backward");
+
+                $(".ui-icon.ui-icon-seek-first").wrap("<div class='btn btn-sm btn-default'></div>");
+                $(".ui-icon.ui-icon-seek-first").removeClass().addClass("fa fa-fast-backward");
+
+                $(".ui-icon.ui-icon-seek-next").wrap("<div class='btn btn-sm btn-default'></div>");
+                $(".ui-icon.ui-icon-seek-next").removeClass().addClass("fa fa-forward");
+
+                $(".ui-icon.ui-icon-seek-end").wrap("<div class='btn btn-sm btn-default'></div>");
+                $(".ui-icon.ui-icon-seek-end").removeClass().addClass("fa fa-fast-forward");
+
+
+                // update buttons
+
+                $(window).on('resize.jqGrid',
+                    function () {
+                        for (i = 1; i <= @ViewBag.KPICount; i++) {
+                            jQuery("#jqgrid" + i).jqGrid('setGridWidth', $("#content").width());
+                        }
+                    });
+
+
+            } // end function
+
+
+        };
+
+        loadScript("/js/plugin/jqgrid/grid.locale-en.min.js", pagefunction);
+
+</script>
+    }

@@ -1,0 +1,54 @@
+@inject IOptions<SmartSettings> Settings
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+<!-- Left panel : Navigation area -->
+<!-- Note: This width of the aside area can be adjusted through LESS variables -->
+<aside id="left-panel">
+    <!-- User info -->
+    <div class="login-info">
+        <span>
+            <!-- User image size is adjusted inside CSS, it should stay as it -->
+            <a href="javascript:void(0);" id="show-shortcut" data-action="toggleShortcut">
+                <img src="~/img/avatars/sunny.png" alt="me" class="online" />
+                <span>@UserManager.GetUserName(User)</span>
+                <i class="fa fa-angle-down"></i>
+            </a>
+        </span>
+    </div>
+    <!-- end user info -->
+    <!-- NAVIGATION : This navigation is also responsive-->
+    <nav>
+        <!--
+        NOTE: Notice the gaps after each icon usage <i></i>..
+        Please note that these links work a bit different than
+        traditional href="" links. See documentation for details.
+        -->
+
+        <ul>
+            <li is-active-route asp-controller="Home">
+                <a href="#" title="Dashboard">
+                    <i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">Dashboard</span>
+                </a>
+                <ul>
+
+                    <li is-active-route asp-controller="Home" asp-action="Index">
+                        <a asp-controller="Home" asp-action="Index" title="Dashboard">
+                            <span class="menu-item-parent">Manage My KPI Dashboard</span>
+                        </a>
+                    </li>
+                    <li is-active-route asp-controller="Home" asp-action="DashboardMarketing">
+                        <a asp-controller="Home" asp-action="DashboardMarketing" title="Dashboard">
+                            <span class="menu-item-parent">My KPI Dashboard</span>
+                        </a>
+                    </li>
+                    <li is-active-route asp-controller="Home" asp-action="Index">
+                        <a asp-controller="Home" asp-action="Index" title="Dashboard">
+                            <span class="menu-item-parent">Default Dashboard</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </nav>
+</aside>
+<!-- END NAVIGATION -->
