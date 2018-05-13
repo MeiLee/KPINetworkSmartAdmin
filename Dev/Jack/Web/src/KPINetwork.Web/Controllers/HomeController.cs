@@ -20,30 +20,49 @@ namespace SmartAdmin.Web.Controllers
             var dashboards = new Dashboards();
             var dashboard = new Dashboard()
             {
-                Name = "Financial KPIs",
-                List = Dashboard.GetDummyData(2)
+                Name = "Financial KPIs"
             };
+            dashboard.GetDummyData(2);
             dashboards.List.Add(dashboard);
 
             dashboard = new Dashboard()
             {
-                Name = "Product KPIs",
-                List = Dashboard.GetDummyData(3)
+                Name = "Product KPIs"
             };
+            dashboard.GetDummyData(3);
             dashboards.List.Add(dashboard);
 
             dashboard = new Dashboard()
             {
-                Name = "Something 1 KPIs",
-                List = Dashboard.GetDummyData(4)
+                Name = "Something 1 KPIs"
             };
+            dashboard.GetDummyData(4);
             dashboards.List.Add(dashboard);
 
             dashboard = new Dashboard()
             {
                 Name = "Something 2 KPIs",
-                List = Dashboard.GetDummyData(5)
             };
+            dashboard.GetDummyData(5);
+            dashboards.List.Add(dashboard);
+
+            ViewBag.KPICount = dashboards.List.Count;
+
+
+            ViewBag.Dashboards = dashboards.ToJson();
+            Debug.WriteLine(dashboards.ToJson());
+
+            return View();
+        }
+
+        public IActionResult SingleDashboard()
+        {
+            var dashboards = new Dashboards();
+            var dashboard = new Dashboard()
+            {
+                Name = "Financial KPIs"
+            };
+            dashboard.GetDummyData(2);
             dashboards.List.Add(dashboard);
 
             ViewBag.KPICount = dashboards.List.Count;

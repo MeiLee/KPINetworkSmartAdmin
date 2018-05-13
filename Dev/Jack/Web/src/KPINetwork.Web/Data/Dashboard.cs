@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -10,6 +11,8 @@ namespace KPINetwork.Web.Data
     {
         public string Name;
         public JArray List;
+        private static JArray ColumnNames;
+        private static JArray ColumnModel;
 
         public JObject ToJson()
         {
@@ -22,173 +25,99 @@ namespace KPINetwork.Web.Data
             return returnObj;
         }
 
-        public static JArray GetDummyData(int max)
+        public JArray GetDummyData(int max)
         {
-            var list = new JArray();
-            var dashboardItem = new DashboardItem();
-            var item = new JObject
+            if (List == null)
             {
-                ["id"] = "1",
-                ["date"] = "2007 -10-01",
-                ["name"] = "test",
-                ["note"] = "note",
-                ["amount"] = "200.00",
-                ["tax"] = "10.00",
-                ["total"] = "210.00"
-            };
-            list.Add(item);
+                if (ColumnNames == null)
+                {
+                    GetColumnNames();
+                }
 
-            if (max == 1)
-                return list;
+                if (ColumnModel == null)
+                {
+                    GetColumnModel();
+                }
 
-            item = new JObject
-            {
-                ["id"] = "2",
-                ["date"] = "2007-10-02",
-                ["name"] = "test2",
-                ["note"] = "note2",
-                ["amount"] = "300.00",
-                ["tax"] = "20.00",
-                ["total"] = "320.00"
-            };
-            list.Add(item);
-            if (max == 2)
-                return list;
+                List = new JArray();
+                for (int i = 0; i < max; i++)
+                {
+                    var item = new DashboardItem();
+                    item.GenerateRandomData(i);
+                    List.Add(item.ToJson());
+                }
+            }
 
-            item = new JObject
-            {
-                ["id"] = "3",
-                ["date"] = "2007-09-01",
-                ["name"] = "test3",
-                ["note"] = "note3",
-                ["amount"] = "400.00",
-                ["tax"] = "30.00",
-                ["total"] = "430.00"
-            };
-            list.Add(item);
-            if (max == 3)
-                return list;
-
-            item = new JObject
-            {
-                ["id"] = "4",
-                ["date"] = "2007-10-04",
-                ["name"] = "test4",
-                ["note"] = "note4",
-                ["amount"] = "200.00",
-                ["tax"] = "10.00",
-                ["total"] = "2100.00"
-            };
-            list.Add(item);
-            if (max == 4)
-                return list;
-
-            item = new JObject
-            {
-                ["id"] = "5",
-                ["date"] = "2007-10-04",
-                ["name"] = "test5",
-                ["note"] = "note5",
-                ["amount"] = "200.00",
-                ["tax"] = "10.00",
-                ["total"] = "2100.00"
-            };
-            list.Add(item);
-
-            return list;
+            return List;
         }
 
         public static JArray GetColumnNames()
         {
-            return new JArray
-            {
-                "Id",
-                "Date",
-                "Client",
-                "Amount",
-                "Tax",
-                "Total",
-                "Notes",
-                "Actions",
-            };
+            if (ColumnNames == null)
+            { 
+                ColumnNames = new JArray();
+                ColumnNames.Add("Id");
+                ColumnNames.Add("Description");
+                for (var month = 1; month <= 12; month++)
+                {
+                    var tempDate = new DateTime(2018, month, 1);
+                    ColumnNames.Add(tempDate.ToString("MMMM", CultureInfo.InvariantCulture));
+                }
+
+                ColumnNames.Add("Actions");
+            }
+
+            return ColumnNames;
         }
 
         public static JArray GetColumnModel()
         {
-            var columnModels = new JArray();
-
-            var item = new JObject
+            if (ColumnModel == null)
             {
-                ["name"] = "id",
-                ["index"] = "id",
-                ["sortable"] = true,
-                ["editable"] = false,
-                ["hidden"] = true,
-            };
-            columnModels.Add(item);
+                ColumnModel = new JArray();
+                var item = new JObject
+                {
+                    ["name"] = "id",
+                    ["index"] = "id",
+                    ["sortable"] = true,
+                    ["editable"] = false,
+                    ["hidden"] = true,
+                };
+                ColumnModel.Add(item);
 
-            item = new JObject
-            {
-                ["name"] = "date",
-                ["index"] = "date",
-                ["sortable"] = true,
-                ["editable"] = true
-            };
-            columnModels.Add(item);
+                item = new JObject
+                {
+                    ["name"] = "description",
+                    ["index"] = "description",
+                    ["sortable"] = true,
+                    ["editable"] = false,
+                    ["hidden"] = false,
+                };
+                ColumnModel.Add(item);
 
-            item = new JObject
-            {
-                ["name"] = "name",
-                ["index"] = "name",
-                ["sortable"] = true,
-                ["editable"] = true
-            };
-            columnModels.Add(item);
+                for (var month = 1; month <= 12; month++)
+                {
+                    var tempDate = new DateTime(2018, month, 1);
+                    item = new JObject
+                    {
+                        ["name"] = tempDate.ToString("MMMM", CultureInfo.InvariantCulture),
+                        ["index"] = tempDate.ToString("MMMM", CultureInfo.InvariantCulture),
+                        ["sortable"] = true,
+                        ["editable"] = true
+                    };
+                    ColumnModel.Add(item);
+                }
 
-            item = new JObject
-            {
-                ["name"] = "amount",
-                ["index"] = "amount",
-                ["sortable"] = true,
-                ["editable"] = true
-            };
-            columnModels.Add(item);
+                item = new JObject
+                {
+                    ["name"] = "act",
+                    ["index"] = "act",
+                    ["sortable"] = false
+                };
+                ColumnModel.Add(item);
+            }
 
-            item = new JObject
-            {
-                ["name"] = "tax",
-                ["index"] = "tax",
-                ["sortable"] = true,
-                ["editable"] = true
-            };
-            columnModels.Add(item);
-            item = new JObject
-            {
-                ["name"] = "total",
-                ["index"] = "total",
-                ["sortable"] = true,
-                ["editable"] = true
-            };
-            columnModels.Add(item);
-
-            item = new JObject
-            {
-                ["name"] = "note",
-                ["index"] = "note",
-                ["sortable"] = true,
-                ["editable"] = true
-            };
-            columnModels.Add(item);
-
-            item = new JObject
-            {
-                ["name"] = "act",
-                ["index"] = "act",
-                ["sortable"] = false
-            };
-            columnModels.Add(item);
-
-            return columnModels;
+            return ColumnModel;
         }
     }
 }
